@@ -167,7 +167,7 @@ def on_btn_click():
 def load_model():
     base_path = './CoalMineLLM_InternLM2'
     if not os.path.exists(base_path):
-        os.system(f'git clone https://code.openxlab.org.cn/viper/CoalMineLLM_InternLM2-Chat-7B.git {base_path}')
+        os.system(f'git clone https://code.openxlab.org.cn/viper/CoalMineLLM_InternLM2-Chat-1_8B.git {base_path}')
         os.system(f'cd {base_path} && git lfs pull')
 
     model = (AutoModelForCausalLM.from_pretrained(base_path,
