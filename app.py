@@ -238,7 +238,7 @@ def main():
         )
         st.image(r"images/coal_mine_safety.png")
 
-    st.title('💬 Coal QA')
+    st.title('💬 煤矿安全大模型--矿途智护者')
     
 
     generation_config = prepare_generation_config()
