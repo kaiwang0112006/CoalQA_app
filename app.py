@@ -165,10 +165,14 @@ def on_btn_click():
 
 @st.cache_resource
 def load_model():
-    base_path = r'/group_share/internlm2_chat_7b_qlora_4000'
+    base_path = r'CoalMineLLM_InternLM2'
     if not os.path.exists(base_path):
-        os.system(f'git clone https://code.openxlab.org.cn/milowang/selfassi_kw.git {base_path}')
+        # download repo to the base_path directory using git
+        os.system('apt install git')
+        os.system('apt install git-lfs')
+        os.system(f'git clone https://code.openxlab.org.cn/viper/CoalMineLLM_InternLM2-Chat-7B.git {base_path}')
         os.system(f'cd {base_path} && git lfs pull')
+
     model = (AutoModelForCausalLM.from_pretrained(base_path,
                                                   trust_remote_code=True).to(
                                                       torch.bfloat16).cuda())
