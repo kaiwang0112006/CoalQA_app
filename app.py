@@ -4,7 +4,7 @@ import copy
 import warnings
 from dataclasses import asdict, dataclass
 from typing import Callable, List, Optional
-
+import shutil
 import streamlit as st
 import torch
 from torch import nn
@@ -167,11 +167,12 @@ def on_btn_click():
 def load_model():
     base_path = r'CoalMineLLM_InternLM2'
     if not os.path.exists(base_path):
+        shutil.rmtree(base_path)
         # download repo to the base_path directory using git
-        os.system('apt install git')
-        os.system('apt install git-lfs')
-        os.system(f'git clone https://code.openxlab.org.cn/viper/CoalMineLLM_InternLM2-Chat-7B.git {base_path}')
-        os.system(f'cd {base_path} && git lfs pull')
+    os.system('apt install git')
+    os.system('apt install git-lfs')
+    os.system(f'git clone https://code.openxlab.org.cn/viper/CoalMineLLM_InternLM2-Chat-7B.git {base_path}')
+    os.system(f'cd {base_path} && git lfs pull')
 
     model = (AutoModelForCausalLM.from_pretrained(base_path,
                                                   trust_remote_code=True).to(
