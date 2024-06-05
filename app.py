@@ -260,7 +260,7 @@ def main():
         # add rag function
         if is_arg=="Yes":
             prompt = use_rag(prompt)
-        prompt = "你是一个煤矿安全领域知识达人，你对相关煤矿安全规程制度、技术等文档非常熟悉。请你专业正确地理解用户想问的煤矿安全相关问题。\n"+prompt
+
         real_prompt = combine_history(prompt)
         # Add user message to chat history
         st.session_state.messages.append({
