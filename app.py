@@ -230,6 +230,8 @@ def main():
     model, tokenizer = load_model()
     print('load model end.')
 
+    robot_avator = 'images/robot.jpg'
+
     with st.sidebar:
         is_arg = st.radio(
             "Whether use RAG for generate",
@@ -268,7 +270,7 @@ def main():
             'content': prompt,
         })
 
-        with st.chat_message('robot'):
+        with st.chat_message('robot',avatar=robot_avator):
             message_placeholder = st.empty()
             for cur_response in generate_interactive(
                     model=model,
