@@ -4,7 +4,7 @@ import copy
 import warnings
 from dataclasses import asdict, dataclass
 from typing import Callable, List, Optional
-import shutil
+
 import streamlit as st
 import torch
 from torch import nn
@@ -14,12 +14,8 @@ from transformers.utils import logging
 
 from transformers import AutoTokenizer, AutoModelForCausalLM  # isort: skip
 
-import sys
-sys.path.append('/path/to/my_module/CoalQA') #注意这里/path/to/my_module换成你下载CoalQA仓库的父目录路径
-
 from rag.main import setup_model_and_tokenizer
 from rag.pipeline import CoalLLMRAG
-
 logger = logging.get_logger(__name__)
 
 
@@ -168,40 +164,26 @@ def generate_interactive(
 def on_btn_click():
     del st.session_state.messages
 
-
 @st.cache_resource
-def load_model(generation_config):
-    base_path = './CoalMineLLM_InternLM2'
+def load_model(generation_config): 
+    base_path = r'/group_share/internlm2_chat_7b_qlora_4000'
     if not os.path.exists(base_path):
         os.system('apt install git')
         os.system('apt install git-lfs')
-        #os.system(f'git clone https://code.openxlab.org.cn/viper/CoalMineLLM_InternLM2-Chat-1_8B.git {base_path}')
-        os.system(f'git clone https://code.openxlab.org.cn/viper/CoalMineLLM_InternLM2-Chat-1_8B.git {base_path}')
-        #os.system(f'git clone https://code.openxlab.org.cn/milowang/CoalMineLLM_InternLM2-Chat-7B-4bit.git {base_path}')
+        os.system(f'git clone https://code.openxlab.org.cn/viper/CoalMineLLM_InternLM2-Chat-7B.git {base_path}')
         os.system(f'cd {base_path} && git lfs pull')
-
     model, tokenizer, llm = setup_model_and_tokenizer(base_path, generation_config)
     return model, tokenizer, llm
-  
+
 @st.cache_resource
 def load_multi_query_model(): 
-    base_path = r'./CoalMineLLM_InternLM2'
+    base_path = r'/share/new_models/Shanghai_AI_Laboratory/internlm2-chat-1_8b-sft'
     model = (AutoModelForCausalLM.from_pretrained(base_path,
                                                   trust_remote_code=True).to(
                                                       torch.bfloat16).cuda())
     tokenizer = AutoTokenizer.from_pretrained(base_path,
                                               trust_remote_code=True)
     return model, tokenizer
-
-def get_similar_query(chat_model, chat_tokenizer, query, num=1):
-    results = []
-    for _ in range(0, num):
-        # 大模型进行改写，记得do_sample设置成true，不然会输出同一个句子，缺少多样性
-        response, _ = chat_model.chat(chat_tokenizer, query + "。你是一个改写句子的专家，注意：现在你的任务是改写/重写句子！！！！！，所以请你用另一种表达方式改写上述话。", history=[], do_sample=True, num_beams=3,
-                                      temperature=0.8)
-        results.append(response)
-    return results
-
 
 
 def prepare_generation_config():
@@ -243,6 +225,16 @@ def combine_history(prompt, retrieval_content=''):
         total_prompt += cur_prompt
     total_prompt = total_prompt + cur_query_prompt.format(user=prompt)
     return total_prompt
+    
+
+def get_similar_query(chat_model, chat_tokenizer, query, num=1):
+    results = []
+    for _ in range(0, num):
+        # 大模型进行改写，记得do_sample设置成true，不然会输出同一个句子，缺少多样性
+        response, _ = chat_model.chat(chat_tokenizer, query + "。你是一个改写句子的专家，注意：现在你的任务是改写/重写句子！！！！！，所以请你用另一种表达方式改写上述话。", history=[], do_sample=True, num_beams=3,
+                                      temperature=0.8)
+        results.append(response)
+    return results
 
 def use_rag(rag_obj, prompt):
     # TODO: RAG function
@@ -269,7 +261,7 @@ def main():
       
     robot_avator = "images/robot.jpg"
     st.title('💬 煤矿安全大模型--矿途智护者')
-    
+
 
     # Initialize chat history
     if 'messages' not in st.session_state:
@@ -308,7 +300,7 @@ def main():
             'content': prompt,
         })
 
-        with st.chat_message('robot',avatar=robot_avator):
+        with st.chat_message('robot',avator=robot_avator):
             message_placeholder = st.empty()
             for cur_response in generate_interactive(
                     model=model,
@@ -324,7 +316,7 @@ def main():
         st.session_state.messages.append({
             'role': 'robot',
             'content': cur_response,  # pylint: disable=undefined-loop-variable
-            "avatar": robot_avator,
+             "avatar": robot_avator,
         })
         torch.cuda.empty_cache()
 
