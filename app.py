@@ -176,7 +176,8 @@ def load_model(generation_config):
         os.system('apt install git')
         os.system('apt install git-lfs')
         #os.system(f'git clone https://code.openxlab.org.cn/viper/CoalMineLLM_InternLM2-Chat-1_8B.git {base_path}')
-        os.system(f'git clone https://code.openxlab.org.cn/viper/CoalMineLLM_InternLM2-Chat-1_8B.git {base_path}')
+        #os.system(f'git clone https://code.openxlab.org.cn/viper/CoalMineLLM_InternLM2-Chat-1_8B.git {base_path}')
+        os.system(f'git clone https://code.openxlab.org.cn/viper/CoalMineLLM_InternLM2-Chat-1_8B-full.git {base_path}')
         #os.system(f'git clone https://code.openxlab.org.cn/milowang/CoalMineLLM_InternLM2-Chat-7B-4bit.git {base_path}')
         os.system(f'cd {base_path} && git lfs pull')
 
@@ -251,15 +252,6 @@ def use_rag(rag_obj, prompt):
     return retrieval_content
 
 def main():
-    generation_config = prepare_generation_config()
-    print('load model begin.')
-    model, tokenizer, llm = load_model(generation_config)
-    print('load model end.')
-    rag_obj = CoalLLMRAG(llm, retrieval_num=3, rerank_flag=False, select_num=3)
-    # print('load rag_obj.')
-
-    # st.title('💬 coal QA')
-
     with st.sidebar:
         is_arg = st.radio(
             "Whether use RAG for generate",
@@ -270,6 +262,11 @@ def main():
     robot_avator = "images/robot.jpg"
     st.title('💬 煤矿安全大模型--矿途智护者')
     
+    generation_config = prepare_generation_config()
+    print('load model begin.')
+    model, tokenizer, llm = load_model(generation_config)
+    print('load model end.')
+    rag_obj = CoalLLMRAG(llm, retrieval_num=3, rerank_flag=False, select_num=3)
 
     # Initialize chat history
     if 'messages' not in st.session_state:
