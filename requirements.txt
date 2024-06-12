@@ -22,9 +22,9 @@ numpy==1.26.4
 pandas==2.2.2
 textract==1.6.5
 PyMuPDF
-fitz
+fitz==0.0.1.dev2
 frontend
 faiss-gpu
 sentence-transformers==2.2.2
-
+loguru==0.7.2
 
