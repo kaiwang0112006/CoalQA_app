@@ -170,7 +170,7 @@ openxlab==0.0.38
 orjson==3.10.3
 oss2==2.17.0
 overrides==7.7.0
-packaging==23.2
+packaging
 pandas==2.2.2
 pandocfilters==1.5.1
 parso==0.8.4
