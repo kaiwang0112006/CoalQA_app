@@ -17,7 +17,7 @@ from rag.config.config import (
     chunk_size,
     chunk_overlap
 )
-from rag.pdf_read import FileOperation
+#from rag.pdf_read import FileOperation
 
 from langchain.embeddings import HuggingFaceBgeEmbeddings
 from langchain_community.document_loaders import DirectoryLoader, TextLoader
@@ -175,17 +175,6 @@ class Data_process():
             loader = DirectoryLoader(data_path, glob="**/*.pdf",show_progress=True)
             docs = loader.load()
             split_docs = text_spliter.split_documents(docs)
-        elif data_path.endswith('.pdf'): 
-            file_path = data_path
-            logger.info(f'splitting file {file_path}')
-            file_opr = FileOperation()
-            text, error = file_opr.read(file_path)
-            if error is not None:
-                logger.info(f'Error!!! {error}')
-            docs = text_spliter.create_documents([text])
-            splits = text_spliter.split_documents(docs)
-            split_docs = splits
-        
         elif data_path.endswith('.txt'): 
             file_path = data_path
             logger.info(f'splitting file {file_path}')
@@ -205,7 +194,7 @@ class Data_process():
         '''
         logger.info(f'Creating index...')
         split_doc = self.split_document(doc_dir)
-
+        print(doc_dir,split_doc)
         logger.info(f'FAISS.from_documents')
         db = FAISS.from_documents(split_doc, emb_model)
         logger.info(f'saving, {len(split_doc)}')

@@ -1,3 +1,4 @@
+'''
 # Copyright (c) OpenMMLab. All rights reserved.
 import hashlib
 import os
@@ -173,3 +174,4 @@ class FileOperation:
 # text, error = file_opr.read('/root/huixiangdou/data_/事故报告文本版定.pdf')
 # print(len(text))
 # print(text[:100])
+'''
