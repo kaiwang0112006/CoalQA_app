@@ -293,7 +293,7 @@ def main():
 
         
 
-        if is_arg=="Yes":
+        if is_arg=="__Yes__":
             retrieval_content = use_rag(rag_obj, prompt)
         
             real_prompt = combine_history(prompt, retrieval_content)
