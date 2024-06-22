@@ -236,7 +236,8 @@ def main():
     with st.sidebar:
         is_arg = st.radio(
             "Whether use RAG for generate",
-            ("Yes", "No")
+            ("Yes", "No"),
+            index=1,
         )
         st.image(r"images/coal_mine_safety.png")
 
@@ -287,6 +288,7 @@ def main():
         st.session_state.messages.append({
             'role': 'robot',
             'content': cur_response,  # pylint: disable=undefined-loop-variable
+            'avatar': robot_avator,
         })
         torch.cuda.empty_cache()
 
